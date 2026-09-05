@@ -1,37 +1,42 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 type WorkMediaProps = {
   poster: string;
   video: string;
   alt: string;
+  isActive?: boolean;
 };
 
 export default function WorkMedia({
   poster,
   video,
   alt,
+  isActive = false,
 }: WorkMediaProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const handleMouseEnter = () => {
+  useEffect(() => {
     const videoElement = videoRef.current;
-
     if (!videoElement) return;
 
-    videoElement.currentTime = 0;
+    if (isActive) {
+      videoElement.currentTime = 0;
+      videoElement.play().catch(() => {});
+    } else {
+      videoElement.pause();
+      videoElement.currentTime = 0;
+    }
+  }, [isActive]);
 
-    videoElement.play().catch(() => {
-      // Браузер может запретить autoplay.
-      // В таком случае просто остаётся poster.
-    });
+  const handleMouseEnter = () => {
+    videoRef.current?.play().catch(() => {});
   };
 
   const handleMouseLeave = () => {
     const videoElement = videoRef.current;
-
-    if (!videoElement) return;
+    if (!videoElement || isActive) return;
 
     videoElement.pause();
     videoElement.currentTime = 0;
@@ -43,12 +48,7 @@ export default function WorkMedia({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <img
-        src={poster}
-        alt={alt}
-        className="amir-work-poster"
-      />
-
+      <img src={poster} alt={alt} className="amir-work-poster" />
       <video
         ref={videoRef}
         className="amir-work-video"
