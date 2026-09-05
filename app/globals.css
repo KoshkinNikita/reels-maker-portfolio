@@ -1,26 +1,2808 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0b0b0b;
+  --foreground: #f4f1ea;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
+  margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* =========================
+  AMIR — GLOBAL ATMOSPHERE
+  ========================= */
+
+.amir-page {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.amir-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px
+    );
+
+  background-size: 80px 80px;
+}
+
+.amir-page::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 50;
+  pointer-events: none;
+
+  opacity: 0.045;
+
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+
+  animation: amirGrain 0.25s steps(2) infinite;
+}
+
+@keyframes amirGrain {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  25% {
+    transform: translate(2%, -1%);
+  }
+
+  50% {
+    transform: translate(-1%, 2%);
+  }
+
+  75% {
+    transform: translate(1%, 1%);
+  }
+
+  100% {
+    transform: translate(-2%, -1%);
+  }
+}
+
+/* =========================
+  HERO LOAD ANIMATIONS
+  ========================= */
+
+.amir-kicker {
+  opacity: 0;
+  transform: translateY(20px);
+
+  animation:
+    amirFadeUp
+    0.8s
+    ease-out
+    0.15s
+    forwards;
+}
+
+.amir-title {
+  opacity: 0;
+  transform: translateY(35px);
+
+  animation:
+    amirTitleIn
+    1s
+    cubic-bezier(0.76, 0, 0.24, 1)
+    0.25s
+    forwards;
+}
+
+.amir-copy {
+  opacity: 0;
+  transform: translateY(20px);
+
+  animation:
+    amirFadeUp
+    0.8s
+    ease-out
+    0.7s
+    forwards;
+}
+
+@keyframes amirFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes amirTitleIn {
+  0% {
+    opacity: 0;
+    transform: translateY(35px);
+    letter-spacing: -0.02em;
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: -0.07em;
+  }
+}
+
+/* =========================
+  PHOTO REVEAL
+  ========================= */
+
+.amir-image {
+  cursor: pointer;
+
+  clip-path: inset(100% 0 0 0);
+
+  animation:
+    amirImageReveal
+    1.2s
+    cubic-bezier(0.76, 0, 0.24, 1)
+    0.35s
+    forwards;
+}
+
+@keyframes amirImageReveal {
+  0% {
+    clip-path: inset(100% 0 0 0);
+  }
+
+  100% {
+    clip-path: inset(0);
+  }
+}
+
+/* =========================
+  PHOTO CAMERA MOVEMENT
+  ========================= */
+
+.amir-photo-frame {
+  transform: scale(1.12) translate(0, 35px);
+  filter: brightness(0.35) blur(8px);
+
+  animation:
+    amirCameraMove
+    2.4s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    0.35s
+    forwards;
+}
+
+@keyframes amirCameraMove {
+  0% {
+    transform: scale(1.12) translate(0, 35px);
+    filter: brightness(0.35) blur(8px);
+  }
+
+  42% {
+    transform: scale(1.04) translate(0, 0);
+    filter: brightness(0.75) blur(2px);
+  }
+
+  55% {
+    transform: scale(1) translate(0, 0);
+    filter: brightness(1) blur(0);
+  }
+
+  64% {
+    transform: scale(1.11) translate(-10px, 6px);
+    filter: brightness(1.35) blur(0);
+  }
+
+  68% {
+    transform: scale(1.08) translate(7px, -4px);
+    filter: brightness(1.15) blur(0);
+  }
+
+  73% {
+    transform: scale(1.04) translate(-3px, 2px);
+    filter: brightness(1) blur(0);
+  }
+
+  80% {
+    transform: scale(1) translate(0, 0);
+    filter: brightness(1) blur(0);
+  }
+
+  100% {
+    transform: scale(1) translate(0, 0);
+    filter: brightness(1) blur(0);
+  }
+}
+
+/* =========================
+  PHOTO HOVER
+  ========================= */
+
+.amir-photo {
+  transition:
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.8s ease;
+}
+
+.amir-image:hover .amir-photo {
+  transform: scale(1.08);
+  filter: brightness(0.55);
+}
+
+/* =========================
+  PHOTO OVERLAY
+  ========================= */
+
+.amir-overlay {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.15);
+  opacity: 0;
+
+  transition:
+    opacity 0.5s ease,
+    background 0.5s ease;
+}
+
+.amir-image:hover .amir-overlay {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.38);
+}
+
+/* =========================
+  HERO PLAY BUTTON
+  ========================= */
+
+.amir-play-button {
+  display: flex;
+
+  width: 78px;
+  height: 78px;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(210, 224, 74, 0.7);
+  border-radius: 999px;
+
+  color: #d6df63;
+  font-size: 24px;
+
+  backdrop-filter: blur(12px);
+
+  transform: scale(0.75);
+
+  transition:
+    transform 0.45s ease,
+    background 0.45s ease,
+    box-shadow 0.45s ease;
+}
+
+.amir-image:hover .amir-play-button {
+  transform: scale(1);
+
+  background: rgba(210, 224, 74, 0.08);
+
+  box-shadow:
+    0 0 35px rgba(210, 224, 74, 0.25);
+}
+
+/* =========================
+  CAMERA FLASH
+  ========================= */
+
+.amir-flash {
+  position: fixed;
+  inset: 0;
+
+  z-index: 999;
+  pointer-events: none;
+
+  background: #ffffff;
+  opacity: 0;
+
+  animation:
+    amirCameraFlash
+    0.5s
+    ease-out
+    1.65s
+    forwards;
+}
+
+@keyframes amirCameraFlash {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0;
+  }
+
+  28% {
+    opacity: 0.95;
+  }
+
+  34% {
+    opacity: 0.2;
+  }
+
+  42% {
+    opacity: 0.75;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* =========================
+  SCROLL TIMELINE
+  ========================= */
+
+.amir-scroll-line {
+  position: absolute;
+
+  left: 60px;
+  top: 0;
+  bottom: 0;
+
+  width: 1px;
+  z-index: 4;
+
+  pointer-events: none;
+}
+
+.amir-scroll-line-progress {
+  position: absolute;
+
+  left: 0;
+  top: 0;
+
+  width: 1px;
+
+  background: #d6df63;
+
+  box-shadow:
+    0 0 12px rgba(210, 224, 74, 0.45);
+
+  transition: height 0.08s linear;
+}
+
+.amir-scroll-playhead {
+  position: absolute;
+
+  left: 50%;
+
+  width: 9px;
+  height: 9px;
+
+  border-radius: 999px;
+
+  background: #d6df63;
+
+  transform: translate(-50%, -50%);
+
+  box-shadow:
+    0 0 0 4px rgba(210, 224, 74, 0.08),
+    0 0 22px rgba(210, 224, 74, 0.65);
+
+  transition: top 0.08s linear;
+}
+
+/* =========================
+  SELECTED WORKS
+  ========================= */
+
+.amir-works {
+  position: relative;
+}
+
+.amir-work-timeline {
+  position: relative;
+}
+
+.amir-work-line {
+  position: absolute;
+
+  left: 60px;
+  top: 0;
+  bottom: 0;
+
+  width: 1px;
+
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(210, 224, 74, 0.45) 8%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(210, 224, 74, 0.25) 92%,
+    transparent
+  );
+}
+
+/* =========================
+  WORK ITEMS
+  ========================= */
+
+.amir-work-item {
+  position: relative;
+
+  opacity: 1;
+  transform: translateY(0);
+
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.amir-work-item:not(.is-active) {
+  opacity: 0.38;
+}
+
+.amir-work-item.is-active {
+  opacity: 1;
+}
+
+/* =========================
+  WORK MARKERS
+  ========================= */
+
+.amir-work-item::before {
+  content: "";
+
+  position: absolute;
+
+  z-index: 5;
+
+  left: 55px;
+  top: 50%;
+
+  width: 11px;
+  height: 11px;
+
+  border: 1px solid rgba(210, 224, 74, 0.8);
+  border-radius: 999px;
+
+  background: #0b0b0b;
+
+  transform: translate(-50%, -50%);
+
+  transition:
+    background 0.4s ease,
+    box-shadow 0.4s ease,
+    transform 0.4s ease;
+}
+
+.amir-work-item:hover::before {
+  background: #d6df63;
+
+  box-shadow:
+    0 0 0 5px rgba(210, 224, 74, 0.08),
+    0 0 25px rgba(210, 224, 74, 0.5);
+
+  transform:
+    translate(-50%, -50%)
+    scale(1.15);
+}
+
+.amir-work-item.is-active::before {
+  background: #d6df63;
+
+  box-shadow:
+    0 0 0 5px rgba(210, 224, 74, 0.08),
+    0 0 25px rgba(210, 224, 74, 0.55);
+
+  animation:
+    amirMarkerActivate
+    0.5s
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes amirMarkerActivate {
+  0% {
+    transform:
+      translate(-50%, -50%)
+      scale(0.7);
+  }
+
+  45% {
+    transform:
+      translate(-50%, -50%)
+      scale(1.35);
+  }
+
+  100% {
+    transform:
+      translate(-50%, -50%)
+      scale(1);
+  }
+}
+
+/* =========================
+  CONNECTOR
+  ========================= */
+
+.amir-work-item::after {
+  content: "";
+
+  position: absolute;
+
+  left: 60px;
+  top: 50%;
+
+  width: 28px;
+  height: 1px;
+
+  background: rgba(210, 224, 74, 0);
+
+  transform: translateY(-50%);
+
+  transition:
+    width 0.5s ease,
+    background 0.5s ease;
+}
+
+.amir-work-item:hover::after {
+  width: 48px;
+  background: rgba(210, 224, 74, 0.5);
+}
+
+/* =========================
+  WORK IMAGE
+  ========================= */
+
+.amir-work-image {
+  position: relative;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  background: #151515;
+
+  transform-origin: center center;
+
+  transition:
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    clip-path 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.8s ease;
+}
+
+/* =========================
+  WORK MEDIA
+  ========================= */
+
+.amir-work-media {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  background: #151515;
+}
+
+.amir-work-poster,
+.amir-work-video {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition:
+    opacity 0.55s ease,
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.8s ease;
+}
+
+.amir-work-poster {
+  z-index: 1;
+  opacity: 1;
+}
+
+.amir-work-video {
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.amir-work-media:hover .amir-work-poster {
+  opacity: 0;
+}
+
+.amir-work-media:hover .amir-work-video {
+  opacity: 1;
+}
+
+.amir-work-media:hover .amir-work-poster,
+.amir-work-media:hover .amir-work-video {
+  transform: scale(1.06);
+}
+
+.amir-work-item.is-active .amir-work-video {
+  filter: brightness(1.03);
+}
+
+/* =========================
+  WORK FRAME UI
+  ========================= */
+
+.amir-work-frame-ui {
+  position: absolute;
+  inset: 0;
+
+  z-index: 8;
+
+  pointer-events: none;
+
+  opacity: 0.3;
+
+  transition:
+    opacity 0.5s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.amir-frame-corner {
+  position: absolute;
+
+  width: 13px;
+  height: 13px;
+
+  border-color: rgba(210, 224, 74, 0.7);
+  border-style: solid;
+
+  opacity: 0.55;
+
+  transition:
+    width 0.45s ease,
+    height 0.45s ease,
+    opacity 0.45s ease;
+}
+
+.amir-frame-tl {
+  left: 14px;
+  top: 14px;
+
+  border-width: 1px 0 0 1px;
+}
+
+.amir-frame-tr {
+  right: 14px;
+  top: 14px;
+
+  border-width: 1px 1px 0 0;
+}
+
+.amir-frame-bl {
+  left: 14px;
+  bottom: 14px;
+
+  border-width: 0 0 1px 1px;
+}
+
+.amir-frame-br {
+  right: 14px;
+  bottom: 14px;
+
+  border-width: 0 1px 1px 0;
+}
+
+.amir-frame-timecode {
+  position: absolute;
+
+  left: 50%;
+  bottom: 14px;
+
+  transform: translateX(-50%);
+
+  font-family: monospace;
+  font-size: 8px;
+  letter-spacing: 0.25em;
+
+  color: rgba(255, 255, 255, 0.45);
+
+  opacity: 0;
+
+  transition:
+    opacity 0.4s ease,
+    transform 0.5s ease;
+}
+
+.amir-work-item:hover .amir-work-frame-ui {
+  opacity: 1;
+}
+
+.amir-work-item:hover .amir-frame-corner {
+  width: 19px;
+  height: 19px;
+
+  opacity: 0.95;
+}
+
+.amir-work-item:hover .amir-frame-timecode {
+  opacity: 1;
+
+  transform:
+    translateX(-50%)
+    translateY(-2px);
+}
+
+/* =========================
+  SCAN LINE
+  ========================= */
+
+.amir-scan-line {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  top: -2px;
+
+  height: 1px;
+
+  background: rgba(210, 224, 74, 0.65);
+
+  box-shadow:
+    0 0 10px rgba(210, 224, 74, 0.55);
+
+  opacity: 0;
+}
+
+.amir-work-item:hover .amir-scan-line {
+  animation:
+    amirScanFrame
+    1.8s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    infinite;
+}
+
+@keyframes amirScanFrame {
+  0% {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  10% {
+    opacity: 0.7;
+  }
+
+  80% {
+    opacity: 0.35;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+/* =========================
+  WORK 01
+  ========================= */
+
+.amir-work-01 .amir-work-image {
+  clip-path: inset(0);
+}
+
+.amir-work-01:hover .amir-work-image {
+  transform: scale(1.015);
+
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.4);
+}
+
+.amir-work-01:hover .amir-work-image img {
+  transform: scale(1.075);
+
+  filter:
+    brightness(1.04)
+    contrast(1.04);
+}
+
+/* =========================
+  WORK 02
+  ========================= */
+
+.amir-work-02 .amir-work-image {
+  clip-path: inset(0);
+
+  transform-origin: center center;
+}
+
+.amir-work-02:hover .amir-work-image {
+  transform:
+    translateX(10px)
+    rotate(-0.4deg)
+    scale(1.012);
+}
+
+.amir-work-02:hover .amir-work-image img {
+  transform:
+    scale(1.09)
+    translateX(-1%);
+
+  filter:
+    brightness(1.05)
+    contrast(1.06);
+}
+
+.amir-work-02:hover .amir-work-frame-ui {
+  transform: translateX(-4px);
+}
+
+/* =========================
+  WORK 03
+  ========================= */
+
+.amir-work-03 .amir-work-image {
+  clip-path: inset(0);
+
+  transform-origin: center center;
+}
+
+.amir-work-03:hover .amir-work-image {
+  transform:
+    translateX(-7px)
+    rotate(0.3deg)
+    scale(1.015);
+}
+
+.amir-work-03:hover .amir-work-image img {
+  transform:
+    scale(1.075)
+    translateX(-1.5%);
+
+  filter:
+    brightness(0.97)
+    contrast(1.06)
+    saturate(0.94);
+}
+
+.amir-work-03:hover .amir-work-frame-ui {
+  transform: translateX(4px);
+}
+
+/* =========================
+  ACTIVE WORK
+  ========================= */
+
+.amir-work-item.is-active .amir-work-image {
+  box-shadow:
+    0 15px 55px rgba(0, 0, 0, 0.28);
+}
+
+.amir-work-item.is-active .amir-work-frame-ui {
+  opacity: 0.55;
+}
+
+/* =========================
+  PLAYING INDICATOR
+  ========================= */
+
+.amir-playing-dot {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 999px;
+
+  background: #d6df63;
+
+  box-shadow:
+    0 0 10px rgba(210, 224, 74, 0.8);
+
+  animation:
+    amirPlayingPulse
+    1s
+    ease-in-out
+    infinite;
+}
+
+@keyframes amirPlayingPulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* =========================
+  NEW WORK REVEAL
+  ========================= */
+
+.amir-work-item.is-active .amir-work-image {
+  animation:
+    amirWorkReveal
+    0.62s
+    cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+@keyframes amirWorkReveal {
+  0% {
+    opacity: 0.35;
+
+    clip-path:
+      inset(0 0 100% 0);
+
+    transform:
+      translateY(18px)
+      scale(1.025);
+  }
+
+  45% {
+    opacity: 1;
+
+    clip-path:
+      inset(0);
+
+    transform:
+      translateY(0)
+      scale(1.01);
+  }
+
+  70% {
+    transform:
+      translateY(0)
+      scale(1.015);
+  }
+
+  100% {
+    opacity: 1;
+
+    clip-path:
+      inset(0);
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+/* =========================
+  INTERNAL CUT
+  ========================= */
+.amir-work-timeline.is-cutting
+.amir-work-item.is-active
+.amir-work-image::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  top: 50%;
+
+  height: 1px;
+
+  z-index: 25;
+
+  pointer-events: none;
+
+  background: #d6df63;
+
+  box-shadow:
+    0 0 10px rgba(210, 224, 74, 0.8);
+
+  transform-origin: center;
+
+  animation:
+    amirCutLine
+    0.24s
+    cubic-bezier(0.76, 0, 0.24, 1)
+    forwards;
+}
+
+@keyframes amirCutLine {
+  0% {
+    opacity: 0;
+
+    transform: scaleX(0);
+  }
+
+  25% {
+    opacity: 1;
+
+    transform: scaleX(0.25);
+  }
+
+  55% {
+    opacity: 1;
+
+    transform: scaleX(1);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform: scaleX(1);
+  }
+}
+
+/* =========================
+  CUT MICRO JOLT
+  ========================= */
+
+.amir-work-timeline.is-cutting
+.amir-work-item.is-active
+.amir-work-image {
+  animation:
+    amirCutMicroJolt
+    0.32s
+    cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+@keyframes amirCutMicroJolt {
+  0% {
+    transform:
+      translateX(0)
+      scale(1);
+  }
+
+  25% {
+    transform:
+      translateX(-4px)
+      scale(1.012);
+  }
+
+  48% {
+    transform:
+      translateX(3px)
+      scale(1.006);
+  }
+
+  72% {
+    transform:
+      translateX(-1px)
+      scale(1.002);
+  }
+
+  100% {
+    transform:
+      translateX(0)
+      scale(1);
+  }
+}
+
+/* =========================
+  COPY CUT
+  ========================= */
+
+.amir-work-timeline.is-cutting
+.amir-work-item.is-active
+.amir-work-copy {
+  animation:
+    amirCopyReveal
+    0.45s
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes amirCopyReveal {
+  0% {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+
+  55% {
+    opacity: 0.7;
+    transform: translateX(-2px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* =========================
+  MOBILE
+  ========================= */
+
+@media (max-width: 767px) {
+  .amir-scroll-line {
+    left: 8px;
+  }
+
+  .amir-work-line {
+    left: 8px;
+  }
+
+  .amir-work-item {
+    padding-left: 28px;
+  }
+
+  .amir-work-item::before {
+    left: 8px;
+  }
+
+  .amir-work-item::after {
+    left: 8px;
+  }
+
+  .amir-image {
+    right: 5%;
+
+    width: 42vw;
+    height: 58vw;
+
+    max-height: none;
+    max-width: none;
+
+    border-radius: 1.5rem;
+  }
+
+  .amir-copy {
+    font-size: 1rem;
+  }
+
+  .amir-play-button {
+    width: 58px;
+    height: 58px;
+
+    font-size: 18px;
+  }
+
+  .amir-work-media {
+    cursor: default;
+  }
+
+  .amir-work-video {
+    display: none;
+  }
+
+  .amir-work-poster {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .amir-work-item:hover .amir-work-image,
+  .amir-work-02:hover .amir-work-image,
+  .amir-work-03:hover .amir-work-image {
+    transform: none;
+    rotate: none;
+  }
+
+  .amir-work-item:hover .amir-work-image img {
+    transform: none;
+    filter: none;
+  }
+
+  .amir-work-frame-ui {
+    opacity: 0.3;
+  }
+
+  .amir-frame-timecode,
+  .amir-scan-line {
+    display: none;
+  }
+
+  .amir-frame-corner {
+    width: 10px;
+    height: 10px;
+  }
+
+  .amir-work-timeline.is-cutting
+  .amir-work-item.is-active
+  .amir-work-image {
+    animation:
+      amirCutJoltMobile
+      0.32s
+      cubic-bezier(0.76, 0, 0.24, 1);
+  }
+
+  @keyframes amirCutJoltMobile {
+    0% {
+      transform: translateX(0);
+    }
+
+    25% {
+      transform: translateX(-3px);
+    }
+
+    50% {
+      transform: translateX(2px);
+    }
+
+    100% {
+      transform: translateX(0);
+    }
+  }
+}
+
+/* =========================
+  REDUCED MOTION
+  ========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+
+    transition-duration: 0.01ms !important;
+  }
+
+  .amir-work-timeline.is-cutting
+  .amir-work-item.is-active
+  .amir-work-image::before {
+    animation: none !important;
+  }
+
+  .amir-scan-line {
+    animation: none !important;
+  }
+}
+
+/* =========================
+   BEHIND THE CUT
+   ========================= */
+
+.amir-about {
+  position: relative;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.amir-about::before {
+  content: "EDIT / 02";
+
+  position: absolute;
+  top: 32px;
+  right: 40px;
+
+  font-family: monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+
+  color: rgba(255, 255, 255, 0.2);
+
+  transition:
+    color 0.4s ease,
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.amir-about:hover::before {
+  color: rgba(210, 224, 74, 0.55);
+  transform: translateX(-8px);
+}
+
+.amir-about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.75fr);
+  gap: 8vw;
+  align-items: start;
+}
+
+.amir-about-heading {
+  position: sticky;
+  top: 80px;
+}
+
+.amir-about-kicker {
+  opacity: 0;
+  transform: translateY(20px);
+
+  transition:
+    opacity 0.7s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.amir-about-title {
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+.amir-about-title span {
+  display: block;
+
+  opacity: 0;
+  transform: translateY(105%);
+
+  transition:
+    opacity 0.9s ease,
+    transform 1s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.amir-about-title span:nth-child(2) {
+  transition-delay: 0.08s;
+}
+
+.amir-about.is-visible .amir-about-kicker {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.amir-about.is-visible .amir-about-title span {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================
+   ABOUT INTRO
+   ========================= */
+
+.amir-about-intro {
+  max-width: 470px;
+
+  opacity: 0;
+  transform: translateY(35px);
+
+  transition:
+    opacity 0.9s ease 0.18s,
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.18s;
+}
+
+.amir-about.is-visible .amir-about-intro {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================
+   EDITING TRACK
+   ========================= */
+
+.amir-about-track {
+  position: relative;
+  padding-left: 34px;
+}
+
+.amir-about-track-line {
+  position: absolute;
+
+  left: 5px;
+  top: 0;
+  bottom: 0;
+
+  width: 1px;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(210, 224, 74, 0.7),
+    rgba(255, 255, 255, 0.12) 55%,
+    rgba(210, 224, 74, 0.3)
+  );
+
+  transform-origin: top;
+  transform: scaleY(0);
+
+  transition:
+    transform 1.4s cubic-bezier(0.76, 0, 0.24, 1) 0.3s;
+}
+
+.amir-about.is-visible .amir-about-track-line {
+  transform: scaleY(1);
+}
+
+.amir-about-step {
+  position: relative;
+
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 20px;
+
+  padding: 20px 0;
+
+  opacity: 0;
+  transform: translateX(24px);
+
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    padding-left 0.45s ease;
+}
+
+.amir-about-step:nth-child(2) {
+  transition-delay: 0.35s;
+}
+
+.amir-about-step:nth-child(3) {
+  transition-delay: 0.45s;
+}
+
+.amir-about-step:nth-child(4) {
+  transition-delay: 0.55s;
+}
+
+.amir-about-step:nth-child(5) {
+  transition-delay: 0.65s;
+}
+
+.amir-about.is-visible .amir-about-step {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.amir-about-step::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 28px;
+
+  width: 11px;
+  height: 11px;
+
+  border: 1px solid rgba(210, 224, 74, 0.7);
+  border-radius: 999px;
+
+  background: #0b0b0b;
+
+  transform: translateX(-50%);
+
+  transition:
+    background 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
+}
+
+.amir-about-step:hover {
+  padding-left: 12px;
+}
+
+.amir-about-step:hover::before {
+  background: #d6df63;
+
+  box-shadow:
+    0 0 0 5px rgba(210, 224, 74, 0.08),
+    0 0 22px rgba(210, 224, 74, 0.5);
+
+  transform: translateX(-50%) scale(1.15);
+}
+
+.amir-about-step-number {
+  padding-top: 3px;
+
+  font-family: monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+
+  color: rgba(255, 255, 255, 0.25);
+
+  transition: color 0.35s ease;
+}
+
+.amir-about-step:hover .amir-about-step-number {
+  color: #d6df63;
+}
+
+.amir-about-step-title {
+  font-size: clamp(1.5rem, 2.4vw, 2.3rem);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.35s ease;
+}
+
+.amir-about-step:hover .amir-about-step-title {
+  color: #d6df63;
+  transform: translateX(5px);
+}
+
+.amir-about-step-copy {
+  max-width: 260px;
+  margin-top: 8px;
+
+  font-size: 12px;
+  line-height: 1.6;
+
+  color: rgba(255, 255, 255, 0.28);
+
+  transition:
+    color 0.35s ease,
+    transform 0.45s ease;
+}
+
+.amir-about-step:hover .amir-about-step-copy {
+  color: rgba(255, 255, 255, 0.5);
+  transform: translateX(5px);
+}
+
+/* =========================
+   BOTTOM WORDS
+   ========================= */
+
+.amir-about-words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+
+  margin-top: 100px;
+  padding-top: 22px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  opacity: 0;
+  transform: translateY(20px);
+
+  transition:
+    opacity 0.8s ease 0.75s,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.75s;
+}
+
+.amir-about.is-visible .amir-about-words {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.amir-about-words span {
+  position: relative;
+
+  font-family: monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+
+  color: rgba(255, 255, 255, 0.25);
+
+  cursor: default;
+
+  transition:
+    color 0.35s ease,
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.amir-about-words span::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: -5px;
+
+  height: 1px;
+
+  background: #d6df63;
+
+  transform: scaleX(0);
+  transform-origin: right;
+
+  transition:
+    transform 0.45s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.amir-about-words span:hover {
+  color: #d6df63;
+  transform: translateY(-3px);
+}
+
+.amir-about-words span:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* =========================
+   ABOUT HOVER ATMOSPHERE
+   ========================= */
+
+.amir-about:hover .amir-about-track-line {
+  box-shadow:
+    0 0 12px rgba(210, 224, 74, 0.15);
+}
+
+/* =========================
+   ABOUT MOBILE
+   ========================= */
+
+@media (max-width: 767px) {
+  .amir-about {
+    padding-top: 120px;
+    padding-bottom: 120px;
+  }
+
+  .amir-about::before {
+    top: 22px;
+    right: 24px;
+
+    font-size: 8px;
+  }
+
+  .amir-about-grid {
+    display: block;
+  }
+
+  .amir-about-heading {
+    position: relative;
+    top: auto;
+  }
+
+  .amir-about-title {
+    margin-top: 30px;
+
+    font-size: 21vw;
+  }
+
+  .amir-about-content {
+    margin-top: 80px;
+  }
+
+  .amir-about-intro {
+    max-width: none;
+  }
+
+  .amir-about-intro p {
+    font-size: 1.15rem;
+  }
+
+  .amir-about-track {
+    margin-top: 65px;
+    padding-left: 27px;
+  }
+
+  .amir-about-step {
+    grid-template-columns: 34px 1fr;
+    gap: 12px;
+
+    padding: 17px 0;
+  }
+
+  .amir-about-step::before {
+    left: 5px;
+  }
+
+  .amir-about-step:hover {
+    padding-left: 7px;
+  }
+
+  .amir-about-step-title {
+    font-size: 1.7rem;
+  }
+
+  .amir-about-step-copy {
+    font-size: 11px;
+  }
+
+  .amir-about-words {
+    margin-top: 70px;
+    gap: 12px 15px;
+  }
+}
+
+/* =========================
+   ABOUT REDUCED MOTION
+   ========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .amir-about-kicker,
+  .amir-about-title span,
+  .amir-about-intro,
+  .amir-about-step,
+  .amir-about-words,
+  .amir-about-track-line {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .amir-about-step:hover,
+  .amir-about-step:hover .amir-about-step-title,
+  .amir-about-step:hover .amir-about-step-copy,
+  .amir-about-words span:hover {
+    transform: none;
+  }
+}
+/* =========================================================
+   BEHIND THE CUT — STEP INTERACTIONS
+   ========================================================= */
+
+.amir-about-step-title {
+  position: relative;
+  display: inline-block;
+}
+
+
+/* =========================================================
+   FRAME
+   Рамка буквально обрамляет слово.
+   ========================================================= */
+
+.amir-about-step--frame .amir-about-step-title {
+  padding: 0;
+  position: relative;
+}
+
+.amir-about-step--frame .amir-about-step-title::before {
+  content: "";
+  position: absolute;
+
+  top: -5px;
+  right: -7px;
+  bottom: -5px;
+  left: -7px;
+
+  border: 1px solid #d6df63;
+
+  opacity: 0;
+  transform: scale(0.88);
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+
+  pointer-events: none;
+}
+
+.amir-about-step--frame:hover .amir-about-step-title::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+
+/* маленькие "углы" поверх рамки */
+
+.amir-about-step--frame .amir-about-step-title::after {
+  content: "";
+
+  position: absolute;
+  inset: -5px -7px;
+
+  background:
+    linear-gradient(#0b0b0b, #0b0b0b) top left / 10px 2px no-repeat,
+    linear-gradient(#0b0b0b, #0b0b0b) top right / 10px 2px no-repeat,
+    linear-gradient(#0b0b0b, #0b0b0b) bottom left / 10px 2px no-repeat,
+    linear-gradient(#0b0b0b, #0b0b0b) bottom right / 10px 2px no-repeat;
+
+  opacity: 0;
+
+  transition: opacity 0.2s ease;
+
+  pointer-events: none;
+}
+
+.amir-about-step--frame:hover .amir-about-step-title::after {
+  opacity: 1;
+
+  top: 50%;
+
+  height: 1px;
+
+  background: #d6df63;
+
+  transform: scaleX(0);
+
+  transform-origin: center;
+
+  transition:
+    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+
+  pointer-events: none;
+}
+
+
+/* само РАЗРЕЗАНИЕ */
+
+.amir-about-step--cut:hover .amir-cut-top {
+  transform: translateY(-8px);
+}
+
+.amir-about-step--cut:hover .amir-cut-bottom {
+  transform: translateY(8px);
+}
+
+.amir-about-step--cut:hover .amir-about-step-title::after {
+  transform: scaleX(1);
+}
+
+
+/* небольшой возврат при уходе курсора */
+.amir-about-step--cut .amir-cut-top,
+.amir-about-step--cut .amir-cut-bottom {
+  will-change: transform;
+}
+
+
+/* =========================================================
+   COLOR
+   RGB / chromatic aberration
+   ========================================================= */
+
+.amir-about-step--color .amir-about-step-title {
+  transition: transform 0.15s ease;
+}
+
+.amir-about-step--color .amir-about-step-title::before,
+.amir-about-step--color .amir-about-step-title::after {
+  content: "COLOR";
+
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  opacity: 0;
+}
+
+.amir-about-step--color .amir-about-step-title::before {
+  color: #ff304f;
+}
+
+.amir-about-step--color .amir-about-step-title::after {
+  color: #3d9cff;
+}
+
+.amir-about-step--color:hover .amir-about-step-title {
+  animation: amir-color-shift 0.42s steps(3);
+}
+
+.amir-about-step--color:hover .amir-about-step-title::before {
+  animation: amir-color-red 0.42s steps(3);
+}
+
+.amir-about-step--color:hover .amir-about-step-title::after {
+  animation: amir-color-blue 0.42s steps(3);
+}
+
+@keyframes amir-color-shift {
+  0% {
+    transform: translateX(0);
+  }
+
+  30% {
+    transform: translateX(-2px);
+  }
+
+  60% {
+    transform: translateX(2px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes amir-color-red {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+
+  30% {
+    opacity: 0.8;
+    transform: translateX(-4px);
+  }
+
+  60% {
+    opacity: 0.4;
+    transform: translateX(-2px);
+  }
+}
+
+@keyframes amir-color-blue {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+
+  30% {
+    opacity: 0.8;
+    transform: translateX(4px);
+  }
+
+  60% {
+    opacity: 0.4;
+    transform: translateX(2px);
+  }
+}
+
+/* =========================================================
+   STORY — LETTERS BREAK APART / REASSEMBLE
+   ========================================================= */
+
+.amir-about-step--story .amir-about-step-title {
+  display: inline-flex;
+
+  width: fit-content;
+
+  /* чтобы буквы не схлопывались */
+  gap: 0;
+}
+
+
+/* каждая буква */
+
+.amir-about-step--story .amir-about-step-title > span {
+  display: inline-block;
+
+  position: relative;
+
+  will-change: transform;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+
+/* S */
+
+.amir-about-step--story:hover
+  .amir-about-step-title > span:nth-child(1) {
+  animation: amir-story-s 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+/* T */
+
+.amir-about-step--story:hover
+  .amir-about-step-title > span:nth-child(2) {
+  animation: amir-story-t 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+/* O */
+
+.amir-about-step--story:hover
+  .amir-about-step-title > span:nth-child(3) {
+  animation: amir-story-o 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+/* R */
+
+.amir-about-step--story:hover
+  .amir-about-step-title > span:nth-child(4) {
+  animation: amir-story-r 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+/* Y */
+
+.amir-about-step--story:hover
+  .amir-about-step-title > span:nth-child(5) {
+  animation: amir-story-y 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------- S ---------- */
+
+@keyframes amir-story-s {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  18% {
+    transform: translate(-16px, -12px) rotate(-14deg);
+  }
+
+  42% {
+    transform: translate(-22px, 5px) rotate(-20deg);
+  }
+
+  68% {
+    transform: translate(5px, -3px) rotate(4deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+
+/* ---------- T ---------- */
+
+@keyframes amir-story-t {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  18% {
+    transform: translate(0, -18px) rotate(8deg);
+  }
+
+  42% {
+    transform: translate(4px, -25px) rotate(12deg);
+  }
+
+  68% {
+    transform: translate(-2px, 4px) rotate(-3deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+
+/* ---------- O ---------- */
+
+@keyframes amir-story-o {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+
+  18% {
+    transform: translate(3px, 16px) scale(0.9) rotate(-8deg);
+  }
+
+  42% {
+    transform: translate(5px, 25px) scale(0.82) rotate(-15deg);
+  }
+
+  68% {
+    transform: translate(-2px, -4px) scale(1.04) rotate(3deg);
+  }
+
+  100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+}
+
+
+/* ---------- R ---------- */
+
+@keyframes amir-story-r {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  18% {
+    transform: translate(15px, -13px) rotate(13deg);
+  }
+
+  42% {
+    transform: translate(24px, -3px) rotate(19deg);
+  }
+
+  68% {
+    transform: translate(-4px, 3px) rotate(-4deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+
+/* ---------- Y ---------- */
+
+@keyframes amir-story-y {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  18% {
+    transform: translate(18px, 14px) rotate(15deg);
+  }
+
+  42% {
+    transform: translate(27px, 22px) rotate(22deg);
+  }
+
+  68% {
+    transform: translate(-4px, -3px) rotate(-4deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .amir-about-step--cut .amir-cut-top,
+  .amir-about-step--cut .amir-cut-bottom,
+  .amir-about-step--cut .amir-about-step-title::after,
+  .amir-about-step--story .amir-about-step-title > span {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* =========================================================
+   CONTACT / START A PROJECT
+   ========================================================= */
+
+.amir-contact {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+
+/* subtle editorial grid */
+
+.amir-contact::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.035) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px
+    );
+
+  background-size: 88px 88px;
+
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 20%,
+    black 80%,
+    transparent
+  );
+}
+
+
+/* =========================================================
+   CONTACT GRID
+   ========================================================= */
+
+.amir-contact-grid {
+  position: relative;
+  z-index: 2;
+
+  display: grid;
+
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.6fr);
+
+  gap: 6rem;
+
+  align-items: end;
+}
+
+
+.amir-contact-heading {
+  min-width: 0;
+}
+
+
+.amir-contact-kicker {
+  position: relative;
+}
+
+
+.amir-contact-title {
+  display: flex;
+
+  flex-direction: column;
+
+  margin: 0;
+
+  font-size: clamp(4rem, 10vw, 11rem);
+
+  font-weight: 500;
+
+  line-height: 0.78;
+
+  letter-spacing: -0.075em;
+}
+
+
+.amir-contact-title span {
+  display: block;
+
+  width: fit-content;
+
+  transition:
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.35s ease;
+}
+
+
+.amir-contact-title span:nth-child(2) {
+  margin-left: 7vw;
+}
+
+
+.amir-contact-title span:nth-child(3) {
+  margin-left: 2vw;
+
+  color: rgba(244, 241, 234, 0.38);
+}
+
+
+/* маленькое движение заголовка при наведении на контактную секцию */
+
+.amir-contact:hover .amir-contact-title span:nth-child(1) {
+  transform: translateX(8px);
+}
+
+.amir-contact:hover .amir-contact-title span:nth-child(2) {
+  transform: translateX(-5px);
+}
+
+.amir-contact:hover .amir-contact-title span:nth-child(3) {
+  transform: translateX(12px);
+}
+
+
+/* =========================================================
+   RIGHT SIDE
+   ========================================================= */
+
+.amir-contact-side {
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-start;
+}
+
+
+.amir-contact-copy {
+  max-width: 320px;
+
+  margin: 0 0 3rem;
+
+  font-size: 1rem;
+
+  line-height: 1.7;
+
+  color: rgba(255, 255, 255, 0.4);
+}
+
+
+/* =========================================================
+   START A PROJECT BUTTON
+   ========================================================= */
+
+.amir-project-button {
+  position: relative;
+
+  display: flex;
+
+  width: 100%;
+  min-height: 110px;
+
+  align-items: center;
+
+  overflow: hidden;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+
+  color: #f4f1ea;
+
+  text-decoration: none;
+
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+
+.amir-project-button-line {
+  position: absolute;
+
+  left: 0;
+  top: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: #d6df63;
+
+  transform: translateX(-101%);
+
+  transition:
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+.amir-project-button:hover .amir-project-button-line {
+  transform: translateX(0);
+}
+
+
+.amir-project-button-index {
+  position: relative;
+  z-index: 2;
+
+  width: 48px;
+
+  font-family: monospace;
+
+  font-size: 9px;
+
+  color: rgba(255, 255, 255, 0.35);
+
+  transition: color 0.3s ease;
+}
+
+
+.amir-project-button-text {
+  position: relative;
+  z-index: 2;
+
+  font-size: 0.8rem;
+
+  font-weight: 500;
+
+  letter-spacing: 0.18em;
+
+  transition:
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.3s ease;
+}
+
+
+.amir-project-button-arrow {
+  position: relative;
+  z-index: 2;
+
+  margin-left: auto;
+
+  font-size: 1.5rem;
+
+  transition:
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.3s ease;
+}
+
+
+.amir-project-button:hover {
+  border-color: #d6df63;
+}
+
+
+.amir-project-button:hover .amir-project-button-index,
+.amir-project-button:hover .amir-project-button-text,
+.amir-project-button:hover .amir-project-button-arrow {
+  color: #0b0b0b;
+}
+
+
+.amir-project-button:hover .amir-project-button-text {
+  transform: translateX(10px);
+}
+
+
+.amir-project-button:hover .amir-project-button-arrow {
+  transform: translate(8px, -8px);
+}
+
+
+/* =========================================================
+   CONTACT DETAILS
+   ========================================================= */
+
+.amir-contact-details {
+  display: flex;
+
+  width: 100%;
+
+  justify-content: space-between;
+
+  gap: 2rem;
+
+  margin-top: 1.5rem;
+
+  font-family: monospace;
+
+  font-size: 9px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.2em;
+
+  color: rgba(255, 255, 255, 0.25);
+}
+
+
+.amir-contact-details a {
+  transition: color 0.3s ease;
+}
+
+
+.amir-contact-details a:hover {
+  color: #d6df63;
+}
+
+
+/* =========================================================
+   FINAL TIMELINE
+   ========================================================= */
+
+.amir-contact-timeline {
+  position: relative;
+  z-index: 2;
+
+  margin-top: 10rem;
+}
+
+
+.amir-contact-time {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 1rem;
+
+  font-family: monospace;
+
+  font-size: 9px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.18em;
+
+  color: rgba(255, 255, 255, 0.2);
+}
+
+
+.amir-contact-track {
+  position: relative;
+
+  height: 54px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+.amir-contact-track-line {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  top: 50%;
+
+  height: 1px;
+
+  background: rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================================================
+   TIMELINE MARKERS
+   ========================================================= */
+
+.amir-contact-marker {
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+
+.amir-contact-marker span {
+  width: 1px;
+  height: 100%;
+
+  background: rgba(255, 255, 255, 0.1);
+}
+
+
+.amir-contact-marker small {
+  position: absolute;
+
+  top: calc(50% + 12px);
+
+  white-space: nowrap;
+
+  font-family: monospace;
+
+  font-size: 7px;
+
+  letter-spacing: 0.15em;
+
+  color: rgba(255, 255, 255, 0.2);
+}
+
+
+.amir-contact-marker-1 {
+  left: 18%;
+}
+
+
+.amir-contact-marker-2 {
+  left: 39%;
+}
+
+
+.amir-contact-marker-3 {
+  left: 61%;
+}
+
+
+.amir-contact-marker-4 {
+  left: 84%;
+}
+
+
+.amir-contact-marker-4 span {
+  background: #d6df63;
+}
+
+
+.amir-contact-marker-4 small {
+  color: #d6df63;
+}
+
+
+/* =========================================================
+   PLAYHEAD
+   ========================================================= */
+
+.amir-contact-playhead {
+  position: absolute;
+
+  top: 50%;
+  left: 18%;
+
+  width: 12px;
+  height: 12px;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  background: #d6df63;
+
+  box-shadow:
+    0 0 0 6px rgba(210, 224, 74, 0.08),
+    0 0 24px rgba(210, 224, 74, 0.5);
+
+  transition:
+    left 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+/*
+  При наведении playhead проходит почти всю timeline.
+  */
+
+.amir-contact:hover .amir-contact-playhead {
+  left: 84%;
+}
+
+
+.amir-contact-playhead::before {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  bottom: 100%;
+
+  width: 1px;
+  height: 20px;
+
+  transform: translateX(-50%);
+
+  background: #d6df63;
+}
+
+
+.amir-contact-playhead::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: 100%;
+
+  width: 1px;
+  height: 20px;
+
+  transform: translateX(-50%);
+
+  background: #d6df63;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.amir-footer {
+  position: relative;
+
+  background: #0b0b0b;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .amir-contact-grid {
+    grid-template-columns: 1fr;
+
+    gap: 5rem;
+  }
+
+  .amir-contact-title {
+    font-size: clamp(3.5rem, 16vw, 6rem);
+
+    line-height: 0.82;
+  }
+
+  .amir-contact-title span:nth-child(2) {
+    margin-left: 9vw;
+  }
+
+  .amir-contact-title span:nth-child(3) {
+    margin-left: 0;
+  }
+
+  .amir-contact:hover .amir-contact-title span {
+    transform: none;
+  }
+
+  .amir-contact-timeline {
+    margin-top: 7rem;
+  }
+
+  .amir-contact-time span:nth-child(2) {
+    max-width: 120px;
+
+    text-align: center;
+  }
+
+  .amir-contact-marker small {
+    display: none;
+  }
+
+  .amir-project-button {
+    min-height: 90px;
+  }
+}
+/* =========================
+   EDITORIAL BACKGROUND 2.0
+   ========================= */
+
+.amir-page::before {
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px),
+    radial-gradient(circle at 72% 18%, rgba(210,224,74,.045), transparent 24%),
+    radial-gradient(circle at 18% 62%, rgba(210,224,74,.025), transparent 22%);
+  background-size: 80px 80px, 80px 80px, 100% 100%, 100% 100%;
+}
+
+.amir-page {
+  background-image: linear-gradient(to bottom, transparent 0%, rgba(255,255,255,.008) 50%, transparent 100%);
+}
+
+/* =========================
+   ABOUT / PROFILE
+   ========================= */
+
+.amir-profile { border-top: 1px solid rgba(255,255,255,.08); }
+.amir-profile-grid { display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:8vw; align-items:center; max-width:1500px; margin:0 auto; }
+.amir-profile-image-wrap { position:relative; overflow:hidden; aspect-ratio:4/5; background:#151515; }
+.amir-profile-image { width:100%; height:100%; object-fit:cover; filter:grayscale(.15) contrast(1.05); transition:transform 1.2s cubic-bezier(.22,1,.36,1), filter .8s ease; }
+.amir-profile-image-wrap:hover .amir-profile-image { transform:scale(1.045); filter:grayscale(0) contrast(1.08); }
+.amir-profile-image-ui { position:absolute; inset:18px; display:flex; justify-content:space-between; align-items:flex-start; font:9px monospace; letter-spacing:.2em; color:rgba(255,255,255,.55); z-index:2; }
+.amir-profile-scan { position:absolute; left:0; right:0; top:-1px; height:1px; background:#d6df63; box-shadow:0 0 12px rgba(214,223,99,.55); opacity:0; }
+.amir-profile-image-wrap:hover .amir-profile-scan { opacity:1; animation:amirProfileScan 2.2s linear infinite; }
+@keyframes amirProfileScan { from { transform:translateY(0); } to { transform:translateY(100%); } }
+.amir-profile-caption { margin-top:12px; font:8px monospace; letter-spacing:.2em; color:rgba(255,255,255,.22); }
+.amir-section-kicker { margin:0; font:10px monospace; text-transform:uppercase; letter-spacing:.3em; color:#d6df63; }
+.amir-profile-title { display:flex; flex-direction:column; margin:32px 0 0; font-size:clamp(3.5rem,7vw,7.8rem); line-height:.82; letter-spacing:-.075em; font-weight:500; }
+.amir-profile-title span:nth-child(2) { margin-left:9vw; }
+.amir-profile-title span:nth-child(4) { color:rgba(244,241,234,.55); }
+.amir-profile-story { max-width:620px; margin-top:42px; font-size:17px; line-height:1.75; color:rgba(255,255,255,.52); }
+.amir-profile-story p+p { margin-top:18px; }
+.amir-profile-meta { display:flex; flex-wrap:wrap; gap:10px 28px; margin-top:40px; padding-top:18px; border-top:1px solid rgba(255,255,255,.1); font:9px monospace; letter-spacing:.18em; color:rgba(255,255,255,.28); }
+
+/* =========================
+   JOURNEY
+   ========================= */
+
+.amir-journey { border-top:1px solid rgba(255,255,255,.08); }
+.amir-journey-head { display:flex; justify-content:space-between; gap:50px; max-width:1500px; margin:0 auto; }
+.amir-journey-title { margin:28px 0 0; font-size:clamp(4rem,9vw,10rem); line-height:.78; letter-spacing:-.08em; font-weight:500; }
+.amir-journey-lead { max-width:350px; align-self:flex-end; color:rgba(255,255,255,.38); font-size:14px; line-height:1.7; }
+.amir-journey-line { position:relative; height:1px; margin:110px auto 80px; max-width:1500px; background:rgba(255,255,255,.12); }
+.amir-journey-progress { position:absolute; inset:0 58% 0 0; background:linear-gradient(90deg, #d6df63, rgba(214,223,99,.12)); }
+.amir-journey-year { position:absolute; top:50%; transform:translate(-50%,-50%); }
+.amir-journey-year span { display:block; margin-bottom:18px; font:9px monospace; letter-spacing:.18em; color:rgba(255,255,255,.3); }
+.amir-journey-year b { display:block; width:9px; height:9px; border-radius:50%; background:#0b0b0b; border:1px solid rgba(210,224,74,.75); }
+.amir-journey-year-1 { left:0; }.amir-journey-year-2 { left:34%; }.amir-journey-year-3 { left:67%; }.amir-journey-year-4 { left:100%; }
+.amir-journey-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:28px; max-width:1500px; margin:0 auto; }
+.amir-journey-grid article { padding-top:18px; border-top:1px solid rgba(255,255,255,.1); transition:transform .5s cubic-bezier(.22,1,.36,1), border-color .5s ease; }
+.amir-journey-grid article:hover { transform:translateY(-8px); border-color:rgba(210,224,74,.55); }
+.amir-journey-grid span { font:9px monospace; letter-spacing:.2em; color:#d6df63; }
+.amir-journey-grid h3 { margin:25px 0 12px; font-size:22px; letter-spacing:-.03em; }
+.amir-journey-grid p { margin:0; max-width:270px; font-size:13px; line-height:1.7; color:rgba(255,255,255,.32); }
+
+/* =========================
+   SERVICES
+   ========================= */
+
+.amir-services { border-top:1px solid rgba(255,255,255,.08); }
+.amir-services-head { display:flex; justify-content:space-between; gap:50px; max-width:1500px; margin:0 auto 90px; }
+.amir-services-title { margin:28px 0 0; font-size:clamp(4rem,9vw,10rem); line-height:.78; letter-spacing:-.08em; font-weight:500; }
+.amir-services-lead { max-width:350px; align-self:flex-end; color:rgba(255,255,255,.38); font-size:14px; line-height:1.7; }
+.amir-services-list { max-width:1500px; margin:0 auto; border-top:1px solid rgba(255,255,255,.12); }
+.amir-service-item { position:relative; display:grid; grid-template-columns:100px 1fr 50px; align-items:center; gap:25px; min-height:120px; border-bottom:1px solid rgba(255,255,255,.1); transition:padding .5s cubic-bezier(.22,1,.36,1), background .5s ease; }
+.amir-service-item:hover { padding:0 24px; background:rgba(210,224,74,.035); }
+.amir-service-index { font:10px monospace; letter-spacing:.2em; color:#d6df63; }
+.amir-service-item h3 { margin:0; font-size:clamp(2rem,4vw,4rem); font-weight:500; line-height:.9; letter-spacing:-.06em; }
+.amir-service-item p { margin:9px 0 0; font:9px monospace; letter-spacing:.16em; color:rgba(255,255,255,.25); text-transform:uppercase; }
+.amir-service-arrow { font-size:25px; color:rgba(255,255,255,.25); transition:transform .4s ease,color .4s ease; }
+.amir-service-item:hover .amir-service-arrow { color:#d6df63; transform:translate(5px,-5px); }
+
+/* =========================
+   FINAL CONTACT POLISH
+   ========================= */
+
+.amir-contact { border-top:1px solid rgba(255,255,255,.08); }
+.amir-contact-title span:last-child { color:rgba(244,241,234,.5); }
+
+@media (max-width: 768px) {
+  .amir-profile-grid,.amir-journey-grid { grid-template-columns:1fr; }
+  .amir-profile-grid { gap:50px; }
+  .amir-profile-title { font-size:18vw; }
+  .amir-profile-title span:nth-child(2) { margin-left:12vw; }
+  .amir-journey-head,.amir-services-head { flex-direction:column; gap:35px; }
+  .amir-journey-title,.amir-services-title { font-size:18vw; }
+  .amir-journey-line { margin:80px 0 60px; }
+  .amir-journey-year span { transform:rotate(-90deg); transform-origin:left center; margin-bottom:32px; }
+  .amir-journey-grid { gap:45px; }
+  .amir-service-item { grid-template-columns:45px 1fr 25px; min-height:105px; gap:12px; }
+  .amir-service-item:hover { padding:0 10px; }
+  .amir-service-item h3 { font-size:10vw; }
 }
