@@ -22,20 +22,50 @@ export default function WorkMedia({
     if (!videoElement) return;
 
     if (isActive) {
-      videoElement.currentTime = 0;
-      videoElement.play().catch(() => {});
-    } else {
-      videoElement.pause();
-      videoElement.currentTime = 0;
+      // Активному видео даём приоритет на загрузку
+      videoElement.preload = "auto";
+      videoElement.load();
+
+      const playVideo = () => {
+        videoElement.currentTime = 0;
+        videoElement.play().catch(() => {});
+      };
+
+      if (videoElement.readyState >= 2) {
+        playVideo();
+      } else {
+        videoElement.addEventListener("canplay", playVideo, {
+          once: true,
+        });
+      }
+
+      return () => {
+        videoElement.removeEventListener("canplay", playVideo);
+      };
     }
+
+    // Неактивные видео не конкурируют за сеть
+    videoElement.pause();
+    videoElement.currentTime = 0;
+    videoElement.preload = "none";
   }, [isActive]);
 
   const handleMouseEnter = () => {
-    videoRef.current?.play().catch(() => {});
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+
+    // При наведении разрешаем браузеру начать загрузку
+    if (videoElement.preload === "none") {
+      videoElement.preload = "auto";
+      videoElement.load();
+    }
+
+    videoElement.play().catch(() => {});
   };
 
   const handleMouseLeave = () => {
     const videoElement = videoRef.current;
+
     if (!videoElement || isActive) return;
 
     videoElement.pause();
@@ -48,7 +78,12 @@ export default function WorkMedia({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <img src={poster} alt={alt} className="amir-work-poster" />
+      <img
+        src={poster}
+        alt={alt}
+        className="amir-work-poster"
+      />
+
       <video
         ref={videoRef}
         className="amir-work-video"
@@ -56,7 +91,7 @@ export default function WorkMedia({
         muted
         playsInline
         loop
-        preload="metadata"
+        preload={isActive ? "auto" : "none"}
         aria-hidden="true"
       />
     </div>
