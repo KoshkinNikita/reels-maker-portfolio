@@ -208,7 +208,7 @@ export default function Home() {
               <div className="amir-work-image aspect-[16/9]">
                 <WorkMedia
                   poster="/images/hero.jpg"
-                  video="/videos/work-01.MP4"
+                  video="/videos/work-01.mp4"
                   alt="Commercial project"
                   isActive={activeWork === 0}
                 />
@@ -281,7 +281,7 @@ export default function Home() {
               <div className="amir-work-image aspect-[9/16]">
                 <WorkMedia
                   poster="/images/hero.jpg"
-                  video="/videos/work-02.MP4"
+                  video="/videos/work-02.mp4"
                   alt="Social media project"
                   isActive={activeWork === 1}
                 />
@@ -354,7 +354,7 @@ export default function Home() {
               <div className="amir-work-image aspect-[16/9]">
                 <WorkMedia
                   poster="/images/hero.jpg"
-                  video="/videos/work-03.MP4"
+                  video="/videos/work-03.mp4"
                   alt="Editorial project"
                   isActive={activeWork === 2}
                 />
